@@ -16,7 +16,7 @@ def is_pkcs7_padded(data):
     return True
 
 def getText(path):
-    with open('TestFiles/1KB_file.txt','r', encoding='utf8') as file:
+    with open(path,'r', encoding='utf8') as file:
         Text = file.read()
     return Text
 
