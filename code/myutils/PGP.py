@@ -1,5 +1,6 @@
 from Crypto.Cipher import AES
 from Crypto.Util.Padding import pad,unpad
+from Crypto.Random import get_random_bytes
 import time
 import numpy as np
 import os
@@ -66,7 +67,7 @@ def decryptor(key, ciphertext,length=128):
         plaintext=unpad(plaintext,BS)
     return plaintext.decode(encoding='utf8')
 
-def tester(path,key):
+def tester(path,key= get_random_bytes(16)):
     Text=ut.getText(path)
     start = time.time()
     ciphertext = encryptor(key,Text)
