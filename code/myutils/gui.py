@@ -2,6 +2,9 @@ import sys
 import os
 from PyQt5.QtWidgets import QApplication, QWidget, QFileDialog, QLabel, QPushButton, QTextEdit, QGridLayout, QVBoxLayout, QHBoxLayout, QMessageBox
 from PyQt5.QtGui import QFont, QTextCursor
+from PyQt5.QtGui import QIcon
+from PyQt5.QtGui import QPalette, QColor
+
 from PyQt5.QtCore import Qt
 import time
 import PGP 
@@ -14,6 +17,8 @@ class MainWindow(QWidget):
         # Set window properties
         self.setWindowTitle("File Encryption/Decryption")
         self.setGeometry(100, 100, 600, 600)
+        self.theme = 'white'
+        self.setStyleSheet(f"background-color: {self.theme};")
         self.file_path=None
         # Create GUI elements
         self.title_label = QLabel("File Encryption/Decryption")
@@ -43,6 +48,7 @@ class MainWindow(QWidget):
         self.dec_time_label = QLabel("Decryption Time:")
         self.dec_time_label.setFont(QFont('Arial', 14))
         self.dec_time_edit = QLabel()
+        self.theme_button = QPushButton("Switch Theme", clicked=self.switch_theme)
         self.show_text_button = QPushButton("Show Text", clicked=self.show_text)
         self.hide_text_button = QPushButton("Hide Text", clicked=self.hide_text)
         self.show_ciphertext_button = QPushButton("Show Ciphertext", clicked=self.show_ciphertext)
@@ -54,6 +60,7 @@ class MainWindow(QWidget):
 
         # Set up layout
         grid_layout = QGridLayout()
+        grid_layout.addWidget(self.theme_button, 0, 4, 1, 1, Qt.AlignRight)
         grid_layout.addWidget(self.title_label, 0, 0, 1, 3, Qt.AlignCenter)
         grid_layout.addWidget(self.subtitle_label, 1, 0, 1, 3, Qt.AlignCenter)
         grid_layout.addWidget(self.select_button, 2, 2, 1, 1, Qt.AlignCenter)
@@ -75,7 +82,6 @@ class MainWindow(QWidget):
         grid_layout.addWidget(self.dec_time_label, 7, 0, 1, 1, Qt.AlignRight)
         grid_layout.addWidget(self.dec_time_edit, 7, 1, 1, 1)
         grid_layout.addWidget(self.save_button, 8, 1, 1, 1, Qt.AlignCenter)
-
             # Create a vertical layout to hold the grid layout and add some padding
         vertical_layout = QVBoxLayout()
         vertical_layout.addLayout(grid_layout)
@@ -89,7 +95,11 @@ class MainWindow(QWidget):
         # Open a file dialog to select a file to encrypt/decrypt
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
-        self.file_path, _ = QFileDialog.getOpenFileName(self, "Select File", "", "Text Files (*.txt)", options=options)
+        file_dialog = QFileDialog(self, options=options)
+        if file_dialog is not None:
+           file_dialog.setStyleSheet("background-color: white;")
+
+        self.file_path, _ = file_dialog.getOpenFileName(self, "Select File", "", "Text Files (*.txt)", options=options)
         if self.file_path:
             # Load the file contents into the text_edit widget
             with open(self.file_path, 'r') as f:
@@ -153,6 +163,28 @@ class MainWindow(QWidget):
         self.plaintext_edit.hide()
         self.hide_plaintext_button.hide()
         self.show_plaintext_button.show()
+    
+    def switch_theme(self):
+
+        # Change background color based on current theme
+        if self.theme == "white":
+            self.setStyleSheet("background-color: black;")
+            for widget in self.findChildren(QWidget):
+                palette = widget.palette()
+                palette.setColor(QPalette.WindowText, Qt.white)
+                widget.setPalette(palette)
+
+                widget.setStyleSheet("border: 1px solid white; color: white;")
+            self.theme = "black"
+        elif self.theme == "black":
+            self.setStyleSheet("background-color: white;")
+            for widget in self.findChildren(QWidget):
+                palette = widget.palette()
+                palette.setColor(QPalette.WindowText, QColor(Qt.black))
+                widget.setPalette(palette)
+                widget.setStyleSheet("border: 1px solid black;")
+            self.theme = "white"
+
 
     def save_results(self):
         # Save the results to a text file
