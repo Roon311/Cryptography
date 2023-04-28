@@ -16,7 +16,7 @@ class MainWindow(QWidget):
 
         # Set window properties
         self.setWindowTitle("File Encryption/Decryption")
-        self.setGeometry(100, 100, 600, 600)
+        self.setGeometry(300, 100, 1200, 900)
         self.theme = 'white'
         self.setStyleSheet(f"background-color: {self.theme};")
         self.file_path=None
@@ -87,6 +87,9 @@ class MainWindow(QWidget):
         vertical_layout.addLayout(grid_layout)
         vertical_layout.addStretch(1)
         vertical_layout.setContentsMargins(50, 50, 50, 50)
+        self.ciphertext_edit.setStyleSheet("border: 2px solid black;")
+        self.text_edit.setStyleSheet("border: 2px solid black;")
+        self.plaintext_edit.setStyleSheet("border: 2px solid black;")
 
         # Set main layout
         self.setLayout(vertical_layout)
