@@ -22,8 +22,14 @@ def encryptor(key, plaintext, length=128):
     ciphertext +=C
     fr=C#Load FR with C[1] through C[BS]
     fre = cipher.encrypt(fr)
-    C_bs_plus_1_2 = bytes([f ^ prefix[i] for i, f in enumerate(fre[:2])])
+
+
+    C_bs_plus_1_2 = bytes([f ^ prefix[BS+i] for i, f in enumerate(fre[:2])])
     ciphertext+=C_bs_plus_1_2
+   # print('-------------------------')
+   # print(prefix)
+   # print('-------------------------')
+
     # resynchronization
     fr = fr[2:] + C_bs_plus_1_2#FR is loaded with C[3] through C[BS+2]
     while plaintext:
@@ -49,7 +55,12 @@ def decryptor(key, ciphertext,length=128):
     fr=ciphertext[0:16]
     fre = cipher.encrypt(fr)
     prefix2 = bytes([f1 ^ c1 for f1, c1 in zip(fre[:2],ciphertext[16:18])])
-    prefix+=prefix2
+    prefix+=prefix2         # I am having an issue with the prefix
+    
+   # print('-------------------------')
+   # print(prefix)
+   # print('-------------------------')
+
     fr=ciphertext[2:18]
     fre = cipher.encrypt(fr)
     c=ciphertext[18:34]
