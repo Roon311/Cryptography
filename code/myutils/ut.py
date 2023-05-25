@@ -1,4 +1,7 @@
 def initialization(num_octet:int):
+    '''
+    This function is responsible for returning the initialization vector
+    '''
     iv = b'\x00' * (num_octet)
     #print(len(iv))
     #print('---------------------------initialization vector-----------------\n')
@@ -7,6 +10,9 @@ def initialization(num_octet:int):
     return iv
 
 def is_pkcs7_padded(data):
+    '''
+    Check the last byte to know if the data was padded
+    '''
     last_byte = data[-1]
     if last_byte > 16:
         return False
@@ -16,11 +22,17 @@ def is_pkcs7_padded(data):
     return True
 
 def getText(path):
+    '''
+    Reads the file
+    '''
     with open(path,'r', encoding='utf8') as file:
         Text = file.read()
     return Text
 
 def WriteResults(filename):
+    '''
+    Write the results to to file
+    '''
     filenamee = filename+".txt"
     #file.write()
     #file.close()
@@ -31,6 +43,9 @@ def WriteResults(filename):
     return file
 
 def drawer(originaltext,ciphertext,encryption_time,plaintext,decryption_time):
+    '''
+    Nice drawer for debugging
+    '''
     print('------------------------------------------- Original Text --------------------------------------------\n')
     print(f'Original Text:\n\n {originaltext}')
     print('\n----------------------------------------- Encryption -----------------------------------------------\n')
